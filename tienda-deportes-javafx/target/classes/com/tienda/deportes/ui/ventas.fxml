@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.VentasController" spacing="10">
+    <TableView fx:id="tablaProductos">
+        <columns>
+            <TableColumn fx:id="columnaNombre" text="Nombre" />
+            <TableColumn fx:id="columnaDescripcion" text="Descripción" />
+            <TableColumn fx:id="columnaMarca" text="Marca" />
+            <TableColumn fx:id="columnaStock" text="Stock" />
+            <TableColumn fx:id="columnaPrecio" text="Precio" />
+        </columns>
+    </TableView>
+    <Button fx:id="btnAnadirCarrito" text="Añadir al carrito" />
+</VBox>
