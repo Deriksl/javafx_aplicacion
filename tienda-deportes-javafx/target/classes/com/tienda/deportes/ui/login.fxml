@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.LoginController">
-    <Label text="Iniciar Sesión" style="-fx-font-size: 24px; -fx-font-family: 'Arial';" />
-    <TextField fx:id="usuarioField" promptText="Usuario" />
-    <PasswordField fx:id="contraseñaField" promptText="Contraseña" />
-    <Button text="Iniciar Sesión" onAction="#iniciarSesion" />
-    <Button text="Registrarse" onAction="#abrirRegistro" />
-    <Button text="← Volver" onAction="#volver" /> <!-- Botón de regreso -->
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.LoginController" stylesheets="@/styles.css">
+    <Label text="Iniciar Sesión" styleClass="label-titulo" />
+    <TextField fx:id="usuarioField" promptText="Usuario" styleClass="text-field" />
+    <PasswordField fx:id="contraseñaField" promptText="Contraseña" styleClass="password-field" />
+    <Button text="Iniciar Sesión" onAction="#iniciarSesion" styleClass="button" />
+    <Button text="Registrarse" onAction="#abrirRegistro" styleClass="button" />
+    <Button text="← Volver" onAction="#volver" styleClass="button" /> <!-- Botón de regreso -->
 </VBox>

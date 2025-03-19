@@ -5,8 +5,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.VentasController" spacing="10">
-    <TableView fx:id="tablaProductos">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.VentasController" spacing="10" stylesheets="@/styles.css">
+    <TableView fx:id="tablaProductos" styleClass="table-view">
         <columns>
             <TableColumn fx:id="columnaNombre" text="Nombre" />
             <TableColumn fx:id="columnaDescripcion" text="Descripción" />
@@ -15,5 +15,5 @@
             <TableColumn fx:id="columnaPrecio" text="Precio" />
         </columns>
     </TableView>
-    <Button fx:id="btnAnadirCarrito" text="Añadir al carrito" />
+    <Button fx:id="btnAnadirCarrito" text="Añadir al carrito" styleClass="button" />
 </VBox>

@@ -1,0 +1,109 @@
+/* Estilos generales */
+.root {
+    -fx-font-family: 'Arial';
+    -fx-background-color: #1E1E1E; /* Fondo gris oscuro */
+    -fx-text-fill: #FFFFFF; /* Texto blanco */
+}
+
+/* Estilos para los botones */
+.button {
+    -fx-background-color: #00BFFF; /* Azul claro */
+    -fx-text-fill: #FFFFFF; /* Texto blanco */
+    -fx-font-size: 14px;
+    -fx-padding: 8px 16px; /* Más compacto */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 191, 255, 0.8), 5, 0, 0, 0); /* Sombra azul */
+    -fx-transition: all 0.3s ease; /* Transición suave */
+}
+
+.button:hover {
+    -fx-background-color: #009ACD; /* Azul más oscuro al pasar el mouse */
+    -fx-effect: dropshadow(gaussian, rgba(0, 154, 205, 0.8), 10, 0, 0, 0); /* Sombra más grande */
+}
+
+/* Estilos para las etiquetas */
+.label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #FFFFFF; /* Texto blanco */
+}
+
+.label-titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #00BFFF; /* Azul claro */
+    -fx-effect: dropshadow(gaussian, rgba(0, 191, 255, 0.8), 5, 0, 0, 0); /* Sombra azul */
+}
+
+/* Estilos para los campos de texto */
+.text-field, .password-field {
+    -fx-background-color: #333333; /* Fondo gris oscuro */
+    -fx-text-fill: #FFFFFF; /* Texto blanco */
+    -fx-font-size: 14px;
+    -fx-padding: 8px; /* Más compacto */
+    -fx-border-color: #00BFFF; /* Borde azul claro */
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: innershadow(gaussian, rgba(0, 191, 255, 0.4), 5, 0, 0, 0); /* Sombra interna */
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #009ACD; /* Borde azul más oscuro al enfocar */
+    -fx-effect: innershadow(gaussian, rgba(0, 154, 205, 0.6), 10, 0, 0, 0); /* Sombra interna más intensa */
+}
+
+/* Estilos para las tablas */
+.table-view {
+    -fx-background-color: #333333; /* Fondo gris oscuro */
+    -fx-border-color: #00BFFF; /* Borde azul claro */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 191, 255, 0.8), 5, 0, 0, 0); /* Sombra azul */
+    -fx-padding: 5px; /* Más compacto */
+}
+
+.table-column {
+    -fx-alignment: CENTER;
+    -fx-font-size: 14px;
+    -fx-text-fill: #FFFFFF; /* Texto blanco */
+    -fx-background-color: #333333; /* Fondo gris oscuro */
+    -fx-padding: 5px; /* Más compacto */
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #444444; /* Fondo gris más claro para filas impares */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #00BFFF; /* Fondo azul claro para filas seleccionadas */
+    -fx-text-fill: #000000; /* Texto negro */
+}
+
+/* Estilos para los botones dentro de la tabla */
+.table-button {
+    -fx-background-color: #FFA500; /* Naranja */
+    -fx-text-fill: #FFFFFF; /* Texto blanco */
+    -fx-font-size: 12px;
+    -fx-padding: 5px 10px; /* Más compacto */
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-effect: dropshadow(gaussian, rgba(255, 165, 0, 0.8), 5, 0, 0, 0); /* Sombra naranja */
+}
+
+.table-button:hover {
+    -fx-background-color: #FF8C00; /* Naranja más oscuro al pasar el mouse */
+    -fx-effect: dropshadow(gaussian, rgba(255, 140, 0, 0.8), 10, 0, 0, 0); /* Sombra más grande */
+}
+
+/* Estilos para el contenedor del carrito */
+.carrito-container {
+    -fx-background-color: #333333; /* Fondo gris oscuro */
+    -fx-padding: 10px; /* Más compacto */
+    -fx-border-color: #00BFFF; /* Borde azul claro */
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 191, 255, 0.8), 5, 0, 0, 0); /* Sombra azul */
+}

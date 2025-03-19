@@ -1,6 +1,8 @@
+com\tienda\deportes\model\DetalleVenta.class
+com\tienda\deportes\bd\DatabaseConnection.class
+com\tienda\deportes\ui\ComprasController.class
 com\tienda\deportes\ui\RegisterController.class
 com\tienda\deportes\bd\UsuarioDAO.class
 com\tienda\deportes\ui\MenuController.class
 com\tienda\deportes\App.class
-com\tienda\deportes\bd\DatabaseConnection.class
 com\tienda\deportes\ui\LoginController.class
