@@ -5,25 +5,25 @@
 <?import javafx.scene.layout.*?>
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="com.tienda.deportes.ui.CarritoController" spacing="10" styleClass="root">
+      fx:controller="com.tienda.deportes.ui.CarritoController" spacing="15" styleClass="root">
     
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     
-    <Label text="Mi Carrito de Compras" styleClass="title-label"/>
+    <Label text="Mi Carrito de Compras" styleClass="label-titulo"/>
     
     <HBox spacing="20" alignment="CENTER_LEFT">
         <TableView fx:id="carritoTable" styleClass="table-view">
             <columns>
-                <TableColumn text="Producto" fx:id="nombreColumn"/>
-                <TableColumn text="Precio" fx:id="precioColumn"/>
-                <TableColumn text="Cantidad" fx:id="cantidadColumn"/>
+                <TableColumn text="Producto" fx:id="nombreColumn" styleClass="table-column"/>
+                <TableColumn text="Precio" fx:id="precioColumn" styleClass="table-column"/>
+                <TableColumn text="Cantidad" fx:id="cantidadColumn" styleClass="table-column"/>
             </columns>
         </TableView>
         
-        <VBox spacing="10" alignment="CENTER">
-            <ImageView fx:id="imagenView" fitWidth="150" fitHeight="150"/>
+        <VBox spacing="15" alignment="CENTER">
+            <ImageView fx:id="imagenView" fitWidth="180" fitHeight="180" styleClass="imagen-producto"/>
             <HBox spacing="10" alignment="CENTER">
                 <Button text="+" onAction="#aumentarCantidad" styleClass="action-button"/>
                 <Button text="-" onAction="#disminuirCantidad" styleClass="action-button"/>
@@ -32,10 +32,13 @@
         </VBox>
     </HBox>
     
-    <Label fx:id="totalLabel" styleClass="total-label"/>
+    <HBox styleClass="panel-total" spacing="10" alignment="CENTER_RIGHT">
+        <Label text="Total:" styleClass="total-label"/>
+        <Label fx:id="totalLabel" styleClass="total-valor"/>
+    </HBox>
     
-    <HBox spacing="10" alignment="CENTER_RIGHT">
+    <HBox spacing="15" alignment="CENTER_RIGHT">
         <Button text="Realizar Compra" onAction="#realizarCompra" styleClass="primary-button"/>
-        <Button text="Regresar al Menú" onAction="#regresarAlMenu" styleClass="secondary-button"/>
+        <Button text="Regresar" onAction="#regresarAlMenu" styleClass="secondary-button"/>
     </HBox>
 </VBox>

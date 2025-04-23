@@ -5,6 +5,7 @@ import com.tienda.deportes.bd.ProductoDAO;
 import com.tienda.deportes.model.Producto;
 import com.tienda.deportes.model.SceneLoader;
 import com.tienda.deportes.model.Sesion;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,12 +21,13 @@ public class MenuController {
     @FXML private TableView<Producto> productosTable;
     @FXML private TableColumn<Producto, String> nombreColumn;
     @FXML private TableColumn<Producto, Double> precioColumn;
+    @FXML private TableColumn<Producto, String> imagenColumn;
     @FXML private TableColumn<Producto, Void> accionesColumn;
     @FXML private HBox menuButtonsContainer;
     @FXML private Button carritoBtn;
     @FXML private Button comprasBtn;
-    @FXML private Button reporteVentasBtn; // Nuevo botón
-    @FXML private Button reporteInventarioBtn; // Nuevo botón
+    @FXML private Button reporteVentasBtn;
+    @FXML private Button reporteInventarioBtn;
     @FXML private Button cerrarSesionBtn;
 
     private final ProductoDAO productoDAO = new ProductoDAO();
@@ -36,8 +38,6 @@ public class MenuController {
     public void initialize() {
         if (!validarSesion()) return;
         
-        System.out.println("Usuario es admin: " + Sesion.esAdmin());
-        
         configurarTabla();
         cargarProductos();
         configurarMenuSegunRol();
@@ -47,6 +47,33 @@ public class MenuController {
     private void configurarTabla() {
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        
+        imagenColumn.setCellFactory(param -> new TableCell<Producto, String>() {
+            private final ImageView imageView = new ImageView();
+            
+            {
+                imageView.setFitHeight(50);
+                imageView.setFitWidth(50);
+                imageView.setPreserveRatio(true);
+            }
+            
+            @Override
+            protected void updateItem(String imagePath, boolean empty) {
+                super.updateItem(imagePath, empty);
+                if (empty || imagePath == null || imagePath.isEmpty()) {
+                    setGraphic(null);
+                } else {
+                    try {
+                        Image image = new Image(getClass().getResourceAsStream(imagePath));
+                        imageView.setImage(image);
+                        setGraphic(imageView);
+                    } catch (Exception e) {
+                        System.err.println("Error al cargar imagen: " + e.getMessage());
+                        setGraphic(null);
+                    }
+                }
+            }
+        });
         
         accionesColumn.setCellFactory(new Callback<>() {
             @Override

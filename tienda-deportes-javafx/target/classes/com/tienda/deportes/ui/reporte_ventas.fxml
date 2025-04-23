@@ -3,16 +3,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.tienda.deportes.ui.ReporteVentasController" stylesheets="@/styles.css">
+<VBox alignment="CENTER" spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.tienda.deportes.ui.ReporteVentasController" styleClass="root">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
     <Label text="Reporte de Ventas" styleClass="label-titulo" />
     
     <TableView fx:id="ventasTable" styleClass="table-view">
         <columns>
-            <TableColumn text="Fecha" fx:id="fechaColumn" />
-            <TableColumn text="Total" fx:id="totalColumn" />
+            <TableColumn text="Fecha" fx:id="fechaColumn" styleClass="table-column"/>
+            <TableColumn text="Cliente" fx:id="clienteColumn" styleClass="table-column"/>
+            <TableColumn text="Productos" fx:id="productosColumn" styleClass="table-column"/>
+            <TableColumn text="Total" fx:id="totalColumn" styleClass="table-column"/>
         </columns>
     </TableView>
 
-    <Button text="Regresar al menú" onAction="#regresarAlMenu" styleClass="button" />
+    <Button text="Regresar al menú" onAction="#regresarAlMenu" styleClass="secondary-button" />
 </VBox>

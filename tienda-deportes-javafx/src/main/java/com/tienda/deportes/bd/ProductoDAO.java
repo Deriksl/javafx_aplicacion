@@ -118,7 +118,6 @@ public class ProductoDAO {
         }
     }
     
-    // Método adicional para obtener un producto por ID
     public Producto obtenerPorId(int id) {
         String sql = "SELECT id, nombre, descripcion, marca, precio, stock, imagen FROM Productos WHERE id = ?";
         

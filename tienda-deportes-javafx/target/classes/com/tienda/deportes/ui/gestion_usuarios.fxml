@@ -5,27 +5,27 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
     fx:controller="com.tienda.deportes.ui.GestionUsuariosController" 
-    spacing="10" styleClass="root">
+    spacing="15" styleClass="root">
     
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     
     <Label text="Gestión de Usuarios" styleClass="label-titulo" />
     
     <TableView fx:id="usuariosTable" styleClass="table-view">
         <columns>
-            <TableColumn text="ID" fx:id="idColumn" />
-            <TableColumn text="Usuario" fx:id="nombreColumn" />
-            <TableColumn text="Tipo" fx:id="tipoColumn" />
-            <TableColumn text="Contraseña" fx:id="passwordColumn" />
+            <TableColumn text="ID" fx:id="idColumn" styleClass="table-column"/>
+            <TableColumn text="Usuario" fx:id="nombreColumn" styleClass="table-column"/>
+            <TableColumn text="Tipo" fx:id="tipoColumn" styleClass="table-column"/>
+            <TableColumn text="Contraseña" fx:id="passwordColumn" styleClass="table-column" visible="false"/>
         </columns>
     </TableView>
     
-    <HBox spacing="10">
-        <Button text="Agregar Usuario" onAction="#agregarUsuario" styleClass="button" />
+    <HBox spacing="15">
+        <Button text="Agregar Usuario" onAction="#agregarUsuario" styleClass="primary-button" />
         <Button fx:id="editarBtn" text="Editar Usuario" onAction="#editarUsuario" styleClass="button" disable="true" />
-        <Button fx:id="eliminarBtn" text="Eliminar Usuario" onAction="#eliminarUsuario" styleClass="button" disable="true" />
-        <Button text="Regresar" onAction="#regresarAlMenu" styleClass="button" />
+        <Button fx:id="eliminarBtn" text="Eliminar Usuario" onAction="#eliminarUsuario" styleClass="delete-button" disable="true" />
+        <Button text="Regresar" onAction="#regresarAlMenu" styleClass="secondary-button" />
     </HBox>
 </VBox>

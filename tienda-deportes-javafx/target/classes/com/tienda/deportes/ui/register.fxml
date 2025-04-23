@@ -5,12 +5,17 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.RegisterController" stylesheets="@/styles.css">
+<VBox alignment="CENTER" spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.tienda.deportes.ui.RegisterController" styleClass="root">
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+    
     <Label text="Registrarse" styleClass="label-titulo" />
     <TextField fx:id="usuarioField" promptText="Usuario" styleClass="text-field" />
     <PasswordField fx:id="contraseñaField" promptText="Contraseña" styleClass="password-field" />
-    <Button text="Registrar" onAction="#registrarUsuario" styleClass="button" />
-    <Button text="← Volver al Login" onAction="#volverAlLogin" styleClass="button" />
+    <Button text="Registrar" onAction="#registrarUsuario" styleClass="primary-button" />
+    <Button text="← Volver al Login" onAction="#volverAlLogin" styleClass="secondary-button" />
 </VBox>

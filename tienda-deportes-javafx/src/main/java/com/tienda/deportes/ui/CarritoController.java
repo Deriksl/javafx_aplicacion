@@ -150,33 +150,48 @@ public class CarritoController {
             return;
         }
 
-        // Crear la venta
-        Venta venta = new Venta();
-        venta.setUsuarioId(Sesion.getUsuarioId());
-        venta.setTotal(productosCarrito.stream()
-            .mapToDouble(p -> p.getPrecio() * p.getCantidadEnCarrito())
-            .sum());
+        // Verificar stock antes de proceder
+        for (Producto producto : productosCarrito) {
+            if (producto.getCantidadEnCarrito() > producto.getStock()) {
+                mostrarAlerta("Stock insuficiente", 
+                    "No hay suficiente stock para: " + producto.getNombre(), 
+                    Alert.AlertType.ERROR);
+                return;
+            }
+        }
 
-        // Crear detalles de venta
-        List<DetalleVenta> detalles = productosCarrito.stream()
-            .map(p -> {
-                DetalleVenta detalle = new DetalleVenta();
-                detalle.setProductoId(p.getId());
-                detalle.setCantidad(p.getCantidadEnCarrito());
-                detalle.setPrecioUnitario(p.getPrecio());
-                return detalle;
-            })
-            .collect(Collectors.toList());
+        try {
+            // Crear la venta
+            Venta venta = new Venta();
+            venta.setUsuarioId(Sesion.getUsuarioId());
+            venta.setTotal(productosCarrito.stream()
+                .mapToDouble(p -> p.getPrecio() * p.getCantidadEnCarrito())
+                .sum());
 
-        // Registrar la venta
-        VentaDAO ventaDAO = new VentaDAO();
-        ventaDAO.realizarVenta(venta, detalles);
+            // Crear detalles de venta
+            List<DetalleVenta> detalles = productosCarrito.stream()
+                .map(p -> {
+                    DetalleVenta detalle = new DetalleVenta();
+                    detalle.setProductoId(p.getId());
+                    detalle.setCantidad(p.getCantidadEnCarrito());
+                    detalle.setPrecioUnitario(p.getPrecio());
+                    return detalle;
+                })
+                .collect(Collectors.toList());
 
-        // Limpiar carrito
-        carritoDAO.limpiarCarrito(Sesion.getUsuarioId());
-        cargarCarrito();
-        
-        mostrarAlerta("Compra realizada", "Su compra se ha registrado con éxito", Alert.AlertType.INFORMATION);
+            // Registrar la venta
+            VentaDAO ventaDAO = new VentaDAO();
+            ventaDAO.realizarVenta(venta, detalles);
+
+            // Limpiar carrito
+            carritoDAO.limpiarCarrito(Sesion.getUsuarioId());
+            cargarCarrito();
+            
+            mostrarAlerta("Compra realizada", "Su compra se ha registrado con éxito", Alert.AlertType.INFORMATION);
+        } catch (Exception e) {
+            mostrarAlerta("Error", "No se pudo completar la compra: " + e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
+        }
     }
 
     @FXML

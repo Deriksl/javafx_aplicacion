@@ -3,18 +3,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
-    fx:controller="com.tienda.deportes.ui.ReporteInventarioController" stylesheets="@/styles.css">
+<VBox alignment="CENTER" spacing="15" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.tienda.deportes.ui.ReporteInventarioController" styleClass="root">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
     <Label text="Reporte de Inventario" styleClass="label-titulo" />
     
     <TableView fx:id="inventarioTable" styleClass="table-view">
         <columns>
-            <TableColumn text="Nombre" fx:id="nombreColumn" />
-            <TableColumn text="Descripción" fx:id="descripcionColumn" />
-            <TableColumn text="Stock" fx:id="stockColumn" />
-            <TableColumn text="Precio" fx:id="precioColumn" />
+            <TableColumn text="Nombre" fx:id="nombreColumn" styleClass="table-column"/>
+            <TableColumn text="Descripción" fx:id="descripcionColumn" styleClass="table-column"/>
+            <TableColumn text="Stock" fx:id="stockColumn" styleClass="table-column"/>
+            <TableColumn text="Precio" fx:id="precioColumn" styleClass="table-column"/>
         </columns>
     </TableView>
 
-    <Button text="Regresar al menú" onAction="#regresarAlMenu" styleClass="button" />
+    <Button text="Regresar al menú" onAction="#regresarAlMenu" styleClass="secondary-button" />
 </VBox>

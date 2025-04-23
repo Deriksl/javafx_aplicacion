@@ -8,20 +8,7 @@ public class Producto {
     private double precio;
     private int stock;
     private String imagen;
-    private int cantidadEnCarrito;  // Para funcionalidad del carrito
-
-    // Constructor vacío
-    public Producto() {
-    }
-
-    // Constructor con parámetros básicos
-    public Producto(String nombre, String descripcion, String marca, double precio, int stock) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.marca = marca;
-        this.precio = precio;
-        this.stock = stock;
-    }
+    private int cantidadEnCarrito; // Nuevo campo para la cantidad en carrito
 
     // Getters y Setters
     public int getId() {
@@ -88,20 +75,7 @@ public class Producto {
         this.cantidadEnCarrito = cantidadEnCarrito;
     }
 
-    // Método para mostrar información del producto (útil para debugging)
-    @Override
-    public String toString() {
-        return "Producto{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", marca='" + marca + '\'' +
-                ", precio=" + precio +
-                ", stock=" + stock +
-                ", imagen='" + imagen + '\'' +
-                '}';
-    }
-
-    // Método para verificar si el producto es válido (antes de guardar)
+    // Método para validar el producto
     public boolean esValido() {
         return nombre != null && !nombre.trim().isEmpty() &&
                marca != null && !marca.trim().isEmpty() &&

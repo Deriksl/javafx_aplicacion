@@ -6,47 +6,51 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
     fx:controller="com.tienda.deportes.ui.GestionProductosController"
-    spacing="10" style="-fx-padding: 20;">
+    spacing="15" styleClass="root">
 
-    <Label text="Gestión de Productos" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
     
-    <TableView fx:id="productosTable">
+    <Label text="Gestión de Productos" styleClass="label-titulo"/>
+    
+    <TableView fx:id="productosTable" styleClass="table-view">
         <columns>
-            <TableColumn text="ID" fx:id="idColumn" prefWidth="50"/>
-            <TableColumn text="Nombre" fx:id="nombreColumn" prefWidth="150"/>
-            <TableColumn text="Descripción" fx:id="descripcionColumn" prefWidth="200"/>
-            <TableColumn text="Marca" fx:id="marcaColumn" prefWidth="100"/>
-            <TableColumn text="Precio" fx:id="precioColumn" prefWidth="80"/>
-            <TableColumn text="Stock" fx:id="stockColumn" prefWidth="80"/>
+            <TableColumn text="ID" fx:id="idColumn" styleClass="table-column" prefWidth="50"/>
+            <TableColumn text="Nombre" fx:id="nombreColumn" styleClass="table-column" prefWidth="150"/>
+            <TableColumn text="Descripción" fx:id="descripcionColumn" styleClass="table-column" prefWidth="200"/>
+            <TableColumn text="Marca" fx:id="marcaColumn" styleClass="table-column" prefWidth="100"/>
+            <TableColumn text="Precio" fx:id="precioColumn" styleClass="table-column" prefWidth="80"/>
+            <TableColumn text="Stock" fx:id="stockColumn" styleClass="table-column" prefWidth="80"/>
         </columns>
     </TableView>
     
-    <GridPane hgap="10" vgap="10">
-        <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <TextField fx:id="nombreField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+    <GridPane hgap="15" vgap="15">
+        <Label text="Nombre:" styleClass="label-informativo" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nombreField" styleClass="text-field" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
         
-        <Label text="Descripción:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <TextArea fx:id="descripcionField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Descripción:" styleClass="label-informativo" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextArea fx:id="descripcionField" styleClass="text-field" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
         
-        <Label text="Marca:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <TextField fx:id="marcaField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Marca:" styleClass="label-informativo" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="marcaField" styleClass="text-field" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
         
-        <Label text="Precio:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <TextField fx:id="precioField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Precio:" styleClass="label-informativo" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="precioField" styleClass="text-field" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
         
-        <Label text="Stock:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
-        <TextField fx:id="stockField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+        <Label text="Stock:" styleClass="label-informativo" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="stockField" styleClass="text-field" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
         
-        <Label text="Imagen:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
-        <HBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1">
-            <ImageView fx:id="imagenView" fitWidth="100" fitHeight="100"/>
-            <Button fx:id="seleccionarImagenBtn" text="Seleccionar"/>
+        <Label text="Imagen:" styleClass="label-informativo" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <HBox spacing="15" GridPane.rowIndex="5" GridPane.columnIndex="1">
+            <ImageView fx:id="imagenView" fitWidth="120" fitHeight="120" styleClass="imagen-producto"/>
+            <Button fx:id="seleccionarImagenBtn" text="Seleccionar" styleClass="button"/>
         </HBox>
     </GridPane>
     
-    <HBox spacing="10">
-        <Button text="Agregar" onAction="#agregarProducto" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
-        <Button text="Limpiar" onAction="#limpiarCampos"/>
-        <Button text="Regresar" onAction="#regresarAlMenu"/>
+    <HBox spacing="15">
+        <Button text="Agregar" onAction="#agregarProducto" styleClass="primary-button"/>
+        <Button text="Limpiar" onAction="#limpiarCampos" styleClass="secondary-button"/>
+        <Button text="Regresar" onAction="#regresarAlMenu" styleClass="secondary-button"/>
     </HBox>
 </VBox>

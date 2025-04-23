@@ -3,6 +3,7 @@ package com.tienda.deportes.model;
 public class DetalleVenta {
     private int ventaId;
     private int productoId;
+    private String nombreProducto;
     private int cantidad;
     private double precioUnitario;
 
@@ -21,6 +22,14 @@ public class DetalleVenta {
 
     public void setProductoId(int productoId) {
         this.productoId = productoId;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public int getCantidad() {

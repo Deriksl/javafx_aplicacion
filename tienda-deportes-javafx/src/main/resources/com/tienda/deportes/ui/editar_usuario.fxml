@@ -5,27 +5,27 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="com.tienda.deportes.ui.EditarUsuarioController" 
-      spacing="10" styleClass="root">
+      spacing="15" styleClass="root">
     
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     
     <Label text="Editar Usuario" styleClass="label-titulo" />
     
-    <GridPane hgap="10" vgap="10">
-        <Label text="Nombre:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <TextField fx:id="nombreField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+    <GridPane hgap="15" vgap="15">
+        <Label text="Nombre:" styleClass="label-informativo" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <TextField fx:id="nombreField" styleClass="text-field" GridPane.columnIndex="1" GridPane.rowIndex="0" />
         
-        <Label text="Contraseña:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label text="Contraseña:" styleClass="label-informativo" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <PasswordField fx:id="passwordField" styleClass="password-field" GridPane.columnIndex="1" GridPane.rowIndex="1" />
         
-        <Label text="Tipo:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-        <ComboBox fx:id="tipoComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        <Label text="Tipo:" styleClass="label-informativo" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <ComboBox fx:id="tipoComboBox" styleClass="combo-box" GridPane.columnIndex="1" GridPane.rowIndex="2" />
     </GridPane>
     
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="guardarBtn" text="Guardar" styleClass="button" />
-        <Button fx:id="cancelarBtn" text="Cancelar" styleClass="button" />
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="guardarBtn" text="Guardar" styleClass="primary-button" />
+        <Button fx:id="cancelarBtn" text="Cancelar" styleClass="secondary-button" />
     </HBox>
 </VBox>

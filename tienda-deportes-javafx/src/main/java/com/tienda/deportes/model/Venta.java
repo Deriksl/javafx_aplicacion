@@ -7,6 +7,7 @@ public class Venta {
     private int usuarioId;
     private LocalDateTime fecha;
     private double total;
+    private String clienteNombre;
 
     // Getters y Setters
     public int getId() {
@@ -39,5 +40,13 @@ public class Venta {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public String getClienteNombre() {
+        return clienteNombre;
+    }
+
+    public void setClienteNombre(String clienteNombre) {
+        this.clienteNombre = clienteNombre;
     }
 }

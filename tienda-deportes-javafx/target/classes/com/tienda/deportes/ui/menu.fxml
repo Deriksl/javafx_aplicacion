@@ -5,31 +5,31 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
       fx:controller="com.tienda.deportes.ui.MenuController" 
-      spacing="10" styleClass="root">
+      spacing="15" styleClass="root">
     
     <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
     
-    <Label text="Menú Principal" styleClass="title-label"/>
+    <Label text="Menú Principal" styleClass="label-titulo"/>
     
-    <HBox fx:id="menuButtonsContainer" spacing="10">
+    <HBox fx:id="menuButtonsContainer" spacing="15">
         <Button fx:id="carritoBtn" text="Carrito" styleClass="button"/>
         <Button fx:id="comprasBtn" text="Mis Compras" styleClass="button"/>
         <Button fx:id="reporteVentasBtn" text="Reporte Ventas" styleClass="button" visible="false"/>
         <Button fx:id="reporteInventarioBtn" text="Reporte Inventario" styleClass="button" visible="false"/>
     </HBox>
     
-    <Label text="Productos Disponibles:" styleClass="subtitle-label"/>
+    <Label text="Productos Disponibles:" styleClass="label-subtitulo"/>
     
     <TableView fx:id="productosTable" styleClass="table-view">
         <columns>
-            <TableColumn text="Imagen" fx:id="imagenColumn"/>
-            <TableColumn text="Producto" fx:id="nombreColumn"/>
-            <TableColumn text="Precio" fx:id="precioColumn"/>
-            <TableColumn text="Acciones" fx:id="accionesColumn"/>
+            <TableColumn text="Imagen" fx:id="imagenColumn" styleClass="table-column"/>
+            <TableColumn text="Producto" fx:id="nombreColumn" styleClass="table-column"/>
+            <TableColumn text="Precio" fx:id="precioColumn" styleClass="table-column"/>
+            <TableColumn text="Acciones" fx:id="accionesColumn" styleClass="table-column"/>
         </columns>
     </TableView>
     
-    <Button fx:id="cerrarSesionBtn" text="Cerrar Sesión" styleClass="button"/>
+    <Button fx:id="cerrarSesionBtn" text="Cerrar Sesión" styleClass="secondary-button"/>
 </VBox>
