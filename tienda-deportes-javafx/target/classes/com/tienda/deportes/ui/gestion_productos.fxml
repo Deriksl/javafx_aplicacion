@@ -6,32 +6,22 @@
 
 <VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
     fx:controller="com.tienda.deportes.ui.GestionProductosController"
-    spacing="10" styleClass="root">
+    spacing="10" style="-fx-padding: 20;">
 
-    <padding>
-        <Insets top="10" right="10" bottom="10" left="10"/>
-    </padding>
-    
-    <Label text="Gestión de Productos" styleClass="label-titulo"/>
+    <Label text="Gestión de Productos" style="-fx-font-size: 20; -fx-font-weight: bold;"/>
     
     <TableView fx:id="productosTable">
         <columns>
-            <TableColumn text="ID" fx:id="idColumn"/>
-            <TableColumn text="Nombre" fx:id="nombreColumn"/>
-            <TableColumn text="Descripción" fx:id="descripcionColumn"/>
-            <TableColumn text="Marca" fx:id="marcaColumn"/>
-            <TableColumn text="Precio" fx:id="precioColumn"/>
-            <TableColumn text="Stock" fx:id="stockColumn"/>
+            <TableColumn text="ID" fx:id="idColumn" prefWidth="50"/>
+            <TableColumn text="Nombre" fx:id="nombreColumn" prefWidth="150"/>
+            <TableColumn text="Descripción" fx:id="descripcionColumn" prefWidth="200"/>
+            <TableColumn text="Marca" fx:id="marcaColumn" prefWidth="100"/>
+            <TableColumn text="Precio" fx:id="precioColumn" prefWidth="80"/>
+            <TableColumn text="Stock" fx:id="stockColumn" prefWidth="80"/>
         </columns>
     </TableView>
     
     <GridPane hgap="10" vgap="10">
-        <columnConstraints>
-            <ColumnConstraints halignment="RIGHT"/>
-            <ColumnConstraints hgrow="SOMETIMES"/>
-        </columnConstraints>
-        
-        <!-- Campos del formulario -->
         <Label text="Nombre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
         <TextField fx:id="nombreField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
         
@@ -47,7 +37,6 @@
         <Label text="Stock:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
         <TextField fx:id="stockField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
         
-        <!-- Sección de imagen -->
         <Label text="Imagen:" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
         <HBox spacing="10" GridPane.rowIndex="5" GridPane.columnIndex="1">
             <ImageView fx:id="imagenView" fitWidth="100" fitHeight="100"/>
@@ -55,10 +44,9 @@
         </HBox>
     </GridPane>
     
-    <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="agregarBtn" text="Agregar" onAction="#agregarProducto"/>
-        <Button fx:id="actualizarBtn" text="Actualizar" onAction="#actualizarProducto" disable="true"/>
-        <Button fx:id="eliminarBtn" text="Eliminar" onAction="#eliminarProducto" disable="true"/>
+    <HBox spacing="10">
+        <Button text="Agregar" onAction="#agregarProducto" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+        <Button text="Limpiar" onAction="#limpiarCampos"/>
         <Button text="Regresar" onAction="#regresarAlMenu"/>
     </HBox>
 </VBox>

@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -37,9 +36,6 @@ public class GestionProductosController {
     @FXML private TextField precioField;
     @FXML private TextField stockField;
     @FXML private ImageView imagenView;
-    @FXML private Button agregarBtn;
-    @FXML private Button actualizarBtn;
-    @FXML private Button eliminarBtn;
     @FXML private Button seleccionarImagenBtn;
 
     private final ProductoDAO productoDAO = new ProductoDAO();
@@ -51,19 +47,13 @@ public class GestionProductosController {
     public void initialize() {
         try {
             Sesion.verificarAdmin();
-            inicializarComponentes();
+            configurarTabla();
+            cargarProductos();
+            configurarEventos();
         } catch (SecurityException e) {
-            manejarErrorAcceso();
-        } catch (Exception e) {
-            manejarErrorGeneral("Error al inicializar: " + e.getMessage());
+            mostrarAlerta("Acceso denegado", "Solo administradores pueden acceder");
+            regresarAlMenu();
         }
-    }
-
-    private void inicializarComponentes() {
-        configurarTabla();
-        cargarProductos();
-        configurarListeners();
-        configurarBotones();
     }
 
     private void configurarTabla() {
@@ -73,6 +63,14 @@ public class GestionProductosController {
         marcaColumn.setCellValueFactory(new PropertyValueFactory<>("marca"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
         stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
+
+        productosTable.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldSelection, newSelection) -> {
+                productoSeleccionado = newSelection;
+                if (productoSeleccionado != null) {
+                    cargarDatosProducto();
+                }
+            });
     }
 
     private void cargarProductos() {
@@ -80,20 +78,8 @@ public class GestionProductosController {
         productosTable.setItems(productosList);
     }
 
-    private void configurarListeners() {
-        productosTable.getSelectionModel().selectedItemProperty().addListener(
-            (obs, oldSelection, newSelection) -> {
-                productoSeleccionado = newSelection;
-                if (productoSeleccionado != null) {
-                    cargarDatosProducto();
-                }
-                actualizarEstadoBotones();
-            });
-    }
-
-    private void configurarBotones() {
-        actualizarBtn.setDisable(true);
-        eliminarBtn.setDisable(true);
+    private void configurarEventos() {
+        seleccionarImagenBtn.setOnAction(e -> seleccionarImagen());
     }
 
     private void cargarDatosProducto() {
@@ -118,18 +104,12 @@ public class GestionProductosController {
         }
     }
 
-    private void actualizarEstadoBotones() {
-        boolean haySeleccion = productoSeleccionado != null;
-        actualizarBtn.setDisable(!haySeleccion);
-        eliminarBtn.setDisable(!haySeleccion);
-    }
-
     @FXML
     private void seleccionarImagen() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Seleccionar imagen del producto");
         fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg")
+            new FileChooser.ExtensionFilter("Imágenes", "*.png", "*.jpg", "*.jpeg", "*.gif")
         );
         
         File file = fileChooser.showOpenDialog(imagenView.getScene().getWindow());
@@ -154,63 +134,7 @@ public class GestionProductosController {
                 }
             }
         } catch (Exception e) {
-            manejarErrorGeneral("Error al agregar producto: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void actualizarProducto() {
-        try {
-            if (productoSeleccionado != null) {
-                Producto producto = crearProductoDesdeCampos();
-                if (producto != null) {
-                    producto.setId(productoSeleccionado.getId());
-                    producto.setImagen(imagenPath != null ? imagenPath : productoSeleccionado.getImagen());
-                    
-                    if (productoDAO.actualizarProducto(producto)) {
-                        mostrarAlerta("Éxito", "Producto actualizado correctamente");
-                        cargarProductos();
-                    } else {
-                        mostrarAlerta("Error", "No se pudo actualizar el producto");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            manejarErrorGeneral("Error al actualizar producto: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void eliminarProducto() {
-        try {
-            if (productoSeleccionado != null) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmar eliminación");
-                alert.setHeaderText(null);
-                alert.setContentText("¿Estás seguro de eliminar el producto " + productoSeleccionado.getNombre() + "?");
-                
-                if (alert.showAndWait().get() == ButtonType.OK) {
-                    if (productoDAO.eliminarProducto(productoSeleccionado.getId())) {
-                        mostrarAlerta("Éxito", "Producto eliminado correctamente");
-                        limpiarCampos();
-                        cargarProductos();
-                    } else {
-                        mostrarAlerta("Error", "No se pudo eliminar el producto");
-                    }
-                }
-            }
-        } catch (Exception e) {
-            manejarErrorGeneral("Error al eliminar producto: " + e.getMessage());
-        }
-    }
-
-    @FXML
-    private void regresarAlMenu() {
-        try {
-            Stage stage = (Stage) productosTable.getScene().getWindow();
-            SceneLoader.loadScene(stage, "/com/tienda/deportes/ui/menu.fxml", "Menú Principal");
-        } catch (Exception e) {
-            manejarErrorGeneral("Error al regresar al menú: " + e.getMessage());
+            mostrarAlerta("Error", "Error al agregar producto: " + e.getMessage());
         }
     }
 
@@ -222,18 +146,26 @@ public class GestionProductosController {
             double precio = Double.parseDouble(precioField.getText().trim());
             int stock = Integer.parseInt(stockField.getText().trim());
             
-            if (nombre.isEmpty() || descripcion.isEmpty() || marca.isEmpty()) {
-                mostrarAlerta("Error", "Todos los campos son obligatorios");
+            if (nombre.isEmpty() || marca.isEmpty()) {
+                mostrarAlerta("Error", "Nombre y marca son obligatorios");
                 return null;
             }
             
-            return new Producto();
+            Producto producto = new Producto();
+            producto.setNombre(nombre);
+            producto.setDescripcion(descripcion);
+            producto.setMarca(marca);
+            producto.setPrecio(precio);
+            producto.setStock(stock);
+            
+            return producto;
         } catch (NumberFormatException e) {
             mostrarAlerta("Error", "Precio y stock deben ser valores numéricos válidos");
             return null;
         }
     }
 
+    @FXML
     private void limpiarCampos() {
         nombreField.clear();
         descripcionField.clear();
@@ -243,16 +175,16 @@ public class GestionProductosController {
         imagenView.setImage(null);
         imagenPath = null;
         productoSeleccionado = null;
-        actualizarEstadoBotones();
     }
 
-    private void manejarErrorAcceso() {
-        mostrarAlerta("Acceso denegado", "No tienes permisos para acceder a esta función");
-        regresarAlMenu();
-    }
-
-    private void manejarErrorGeneral(String mensaje) {
-        mostrarAlerta("Error", mensaje);
+    @FXML
+    private void regresarAlMenu() {
+        try {
+            Stage stage = (Stage) productosTable.getScene().getWindow();
+            SceneLoader.loadScene(stage, "/com/tienda/deportes/ui/menu.fxml", "Menú Principal");
+        } catch (Exception e) {
+            mostrarAlerta("Error", "Error al regresar al menú: " + e.getMessage());
+        }
     }
 
     private void mostrarAlerta(String titulo, String mensaje) {
