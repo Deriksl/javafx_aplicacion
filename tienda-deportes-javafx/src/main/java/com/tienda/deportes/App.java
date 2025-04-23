@@ -9,10 +9,12 @@ import javafx.stage.Stage;
 public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Cargar el archivo FXML desde el classpath
         Parent root = FXMLLoader.load(getClass().getResource("/com/tienda/deportes/ui/login.fxml"));
         primaryStage.setTitle("Tienda de Deportes - Login");
-        primaryStage.setScene(new Scene(root, 300, 200));
+        
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMaximized(true); // Pantalla completa al iniciar
         primaryStage.show();
     }
 

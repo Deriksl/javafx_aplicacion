@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.tienda.deportes.ui.ReporteVentasController" stylesheets="@/styles.css">
+    <Label text="Reporte de Ventas" styleClass="label-titulo" />
+    
+    <TableView fx:id="ventasTable" styleClass="table-view">
+        <columns>
+            <TableColumn text="Fecha" fx:id="fechaColumn" />
+            <TableColumn text="Total" fx:id="totalColumn" />
+        </columns>
+    </TableView>
+
+    <Button text="Regresar al menú" onAction="#regresarAlMenu" styleClass="button" />
+</VBox>

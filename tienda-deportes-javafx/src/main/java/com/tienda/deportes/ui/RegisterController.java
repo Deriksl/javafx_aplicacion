@@ -1,6 +1,7 @@
 package com.tienda.deportes.ui;
 
 import com.tienda.deportes.bd.UsuarioDAO;
+import com.tienda.deportes.model.Usuario;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,29 +21,39 @@ public class RegisterController {
 
     @FXML
     private void registrarUsuario() {
-        String usuario = usuarioField.getText();
-        String contraseña = contraseñaField.getText();
+        String usuario = usuarioField.getText().trim();
+        String contraseña = contraseñaField.getText().trim();
+
+        if (usuario.isEmpty() || contraseña.isEmpty()) {
+            mostrarError("Todos los campos son obligatorios");
+            return;
+        }
+
+        Usuario nuevoUsuario = new Usuario();
+        nuevoUsuario.setNombre(usuario);
+        nuevoUsuario.setPassword(contraseña);
+        nuevoUsuario.setTipo("cliente"); // Por defecto todos los nuevos usuarios son clientes
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        if (usuarioDAO.registrarUsuario(usuario, contraseña)) {
+        if (usuarioDAO.registrarUsuario(nuevoUsuario)) {
             mostrarMensaje("Registro exitoso");
             volverAlLogin();
         } else {
-            mostrarError("Error al registrar usuario");
+            mostrarError("Error al registrar usuario. ¿El nombre de usuario ya existe?");
         }
     }
 
     @FXML
     private void volverAlLogin() {
         try {
-            // Cargar la ventana de login
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tienda/deportes/ui/login.fxml"));
             Parent root = loader.load();
             Stage stage = (Stage) usuarioField.getScene().getWindow();
             stage.setScene(new Scene(root));
+            stage.setTitle("Iniciar Sesión");
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            mostrarError("Error al regresar al login: " + e.getMessage());
         }
     }
 

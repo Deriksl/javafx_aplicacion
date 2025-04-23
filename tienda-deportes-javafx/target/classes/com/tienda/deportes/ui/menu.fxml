@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.MenuController" stylesheets="@/styles.css">
-    <Label text="Menú Principal" styleClass="label-titulo" />
-    <Button text="Cerrar Sesión" onAction="#cerrarSesion" styleClass="button" />
-    <Button text="Carrito" onAction="#mostrarCarrito" styleClass="button" />
-    <Button text="Ver Compras" onAction="#verCompras" styleClass="button" />
-
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.tienda.deportes.ui.MenuController" 
+      spacing="10" styleClass="root">
+    
+    <padding>
+        <Insets top="10" right="10" bottom="10" left="10"/>
+    </padding>
+    
+    <Label text="Menú Principal" styleClass="title-label"/>
+    
+    <HBox fx:id="menuButtonsContainer" spacing="10">
+        <Button fx:id="carritoBtn" text="Carrito" styleClass="button"/>
+        <Button fx:id="comprasBtn" text="Mis Compras" styleClass="button"/>
+        <Button fx:id="reporteVentasBtn" text="Reporte Ventas" styleClass="button" visible="false"/>
+        <Button fx:id="reporteInventarioBtn" text="Reporte Inventario" styleClass="button" visible="false"/>
+    </HBox>
+    
+    <Label text="Productos Disponibles:" styleClass="subtitle-label"/>
+    
     <TableView fx:id="productosTable" styleClass="table-view">
         <columns>
-            <TableColumn text="Nombre" fx:id="nombreColumn" />
-            <TableColumn text="Descripción" fx:id="descripcionColumn" />
-            <TableColumn text="Marca" fx:id="marcaColumn" />
-            <TableColumn text="Precio" fx:id="precioColumn" />
-            <TableColumn text="Stock" fx:id="stockColumn" />
-            <TableColumn text="Agregar" fx:id="agregarColumn" />
+            <TableColumn text="Producto" fx:id="nombreColumn"/>
+            <TableColumn text="Precio" fx:id="precioColumn"/>
+            <TableColumn text="Acciones" fx:id="accionesColumn"/>
         </columns>
     </TableView>
+    
+    <Button fx:id="cerrarSesionBtn" text="Cerrar Sesión" styleClass="button"/>
 </VBox>

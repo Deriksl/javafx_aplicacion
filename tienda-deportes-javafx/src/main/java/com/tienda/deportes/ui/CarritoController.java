@@ -1,137 +1,125 @@
 package com.tienda.deportes.ui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.tienda.deportes.bd.CarritoDAO;
-import com.tienda.deportes.bd.VentaDAO;
-import com.tienda.deportes.model.DetalleVenta;
 import com.tienda.deportes.model.Producto;
-import com.tienda.deportes.model.Venta;
+import com.tienda.deportes.model.Sesion;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class CarritoController {
-    @FXML
-    private TableView<Producto> carritoTable;
-    @FXML
-    private TableColumn<Producto, String> nombreColumn;
-    @FXML
-    private TableColumn<Producto, Double> precioColumn;
-    @FXML
-    private TableColumn<Producto, Void> eliminarColumn;
-    @FXML
-    private Label precioTotalLabel;
+    @FXML private TableView<Producto> carritoTable;
+    @FXML private TableColumn<Producto, String> nombreColumn;
+    @FXML private TableColumn<Producto, Double> precioColumn;
+    @FXML private TableColumn<Producto, Integer> cantidadColumn;
+    @FXML private Label totalLabel;
+    @FXML private ImageView imagenView;
 
-    private ObservableList<Producto> carritoObservableList;
-    private CarritoDAO carritoDAO = new CarritoDAO();
-    private VentaDAO ventaDAO = new VentaDAO();
+    private final CarritoDAO carritoDAO = new CarritoDAO();
+    private ObservableList<Producto> productosCarrito;
 
     @FXML
-    private void initialize() {
-        // Configurar las columnas de la tabla
+    public void initialize() {
+        configurarTabla();
+        cargarCarrito();
+    }
+
+    private void configurarTabla() {
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
+        cantidadColumn.setCellValueFactory(new PropertyValueFactory<>("cantidadEnCarrito"));
 
-        // Configurar la columna de "Eliminar"
-        eliminarColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button eliminarButton = new Button("Eliminar");
-
-            {
-                eliminarButton.setOnAction(event -> {
-                    Producto producto = getTableView().getItems().get(getIndex());
-                    eliminarDelCarrito(producto);
-                });
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(eliminarButton);
-                }
-            }
-        });
-
-        // Cargar los productos del carrito
-        cargarCarrito();
+        carritoTable.getSelectionModel().selectedItemProperty().addListener(
+            (obs, oldVal, newVal) -> mostrarImagenProducto(newVal));
     }
 
     private void cargarCarrito() {
-        List<Producto> productos = carritoDAO.obtenerProductosDelCarrito(1); // Suponiendo que el usuario tiene id=1
-        carritoObservableList = FXCollections.observableArrayList(productos);
-        carritoTable.setItems(carritoObservableList);
-
-        // Calcular el precio total
-        double precioTotal = productos.stream().mapToDouble(Producto::getPrecio).sum();
-        precioTotalLabel.setText(String.format("Precio total: $%.2f", precioTotal));
+        productosCarrito = FXCollections.observableArrayList(
+            carritoDAO.obtenerProductosDelCarrito(Sesion.getUsuarioId())
+        );
+        carritoTable.setItems(productosCarrito);
+        calcularTotal();
     }
 
-    private void eliminarDelCarrito(Producto producto) {
-        carritoDAO.eliminarProductoDelCarrito(1, producto.getId()); // Suponiendo que el usuario tiene id=1
-        carritoObservableList.remove(producto);
+    private void mostrarImagenProducto(Producto producto) {
+        if (producto != null && producto.getImagen() != null) {
+            try {
+                Image image = new Image("file:" + producto.getImagen());
+                imagenView.setImage(image);
+            } catch (Exception e) {
+                imagenView.setImage(null);
+            }
+        } else {
+            imagenView.setImage(null);
+        }
+    }
 
-        // Recalcular el precio total
-        double precioTotal = carritoObservableList.stream().mapToDouble(Producto::getPrecio).sum();
-        precioTotalLabel.setText(String.format("Precio total: $%.2f", precioTotal));
+    private void calcularTotal() {
+        double total = productosCarrito.stream()
+            .mapToDouble(p -> p.getPrecio() * p.getCantidadEnCarrito())
+            .sum();
+        totalLabel.setText(String.format("Total: $%.2f", total));
     }
 
     @FXML
-    private void comprarCarrito() {
-        List<Producto> productos = carritoObservableList;
-
-        // Crear la venta
-        Venta venta = new Venta();
-        venta.setUsuarioId(1); // Suponiendo que el usuario tiene id=1
-        venta.setTotal(productos.stream().mapToDouble(Producto::getPrecio).sum());
-
-        // Crear los detalles de la venta
-        List<DetalleVenta> detalles = new ArrayList<>();
-        for (Producto producto : productos) {
-            DetalleVenta detalle = new DetalleVenta();
-            detalle.setProductoId(producto.getId());
-            detalle.setCantidad(1); // Suponiendo que la cantidad es 1
-            detalle.setPrecioUnitario(producto.getPrecio());
-            detalles.add(detalle);
+    private void aumentarCantidad() {
+        Producto seleccionado = carritoTable.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            carritoDAO.actualizarCantidadProducto(
+                Sesion.getUsuarioId(), 
+                seleccionado.getId(), 
+                seleccionado.getCantidadEnCarrito() + 1
+            );
+            cargarCarrito();
         }
+    }
 
-        // Realizar la venta
-        ventaDAO.realizarVenta(venta, detalles);
+    @FXML
+    private void disminuirCantidad() {
+        Producto seleccionado = carritoTable.getSelectionModel().getSelectedItem();
+        if (seleccionado != null && seleccionado.getCantidadEnCarrito() > 1) {
+            carritoDAO.actualizarCantidadProducto(
+                Sesion.getUsuarioId(), 
+                seleccionado.getId(), 
+                seleccionado.getCantidadEnCarrito() - 1
+            );
+            cargarCarrito();
+        }
+    }
 
-        // Limpiar el carrito
-        carritoDAO.limpiarCarrito(1); // Suponiendo que el usuario tiene id=1
+    @FXML
+    private void eliminarProducto() {
+        Producto seleccionado = carritoTable.getSelectionModel().getSelectedItem();
+        if (seleccionado != null) {
+            carritoDAO.eliminarProductoDelCarrito(
+                Sesion.getUsuarioId(), 
+                seleccionado.getId()
+            );
+            cargarCarrito();
+        }
+    }
+
+    @FXML
+    private void realizarCompra() {
+        // Implementación de la compra
+        carritoDAO.limpiarCarrito(Sesion.getUsuarioId());
         cargarCarrito();
+        mostrarAlerta("Compra realizada", "Su compra se ha realizado con éxito", Alert.AlertType.INFORMATION);
     }
 
-@FXML
-private void regresarAlMenu() {
-    try {
-        // Cargar la ventana del menú
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tienda/deportes/ui/menu.fxml"));
-        Parent root = loader.load();
-
-        // Obtener la ventana actual (Stage)
-        Stage stage = (Stage) carritoTable.getScene().getWindow();
-
-        // Reemplazar la escena actual con la escena del menú
-        stage.setScene(new Scene(root));
-        stage.setTitle("Menú Principal");
-    } catch (Exception e) {
-        e.printStackTrace();
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
-}
 }

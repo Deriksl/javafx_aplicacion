@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.PasswordField?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.LoginController" stylesheets="@/styles.css">
-    <Label text="Iniciar Sesión" styleClass="label-titulo" />
-    <TextField fx:id="usuarioField" promptText="Usuario" styleClass="text-field" />
-    <PasswordField fx:id="contraseñaField" promptText="Contraseña" styleClass="password-field" />
-    <Button text="Iniciar Sesión" onAction="#iniciarSesion" styleClass="button" />
-    <Button text="Registrarse" onAction="#abrirRegistro" styleClass="button" />
-    <Button text="← Volver" onAction="#volver" styleClass="button" /> <!-- Botón de regreso -->
+<VBox xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+      fx:controller="com.tienda.deportes.ui.LoginController" 
+      alignment="CENTER" spacing="20" style="-fx-background-color: #f5f5f5;">
+    
+    <padding>
+        <Insets top="40" right="40" bottom="40" left="40"/>
+    </padding>
+    
+    <Label text="Tienda Deportiva" style="-fx-font-size: 24px; -fx-font-weight: bold;">
+        <font>
+            <Font name="Arial" size="24.0" />
+        </font>
+    </Label>
+    
+    <Label text="Inicio de Sesión" style="-fx-font-size: 18px;"/>
+    
+    <GridPane hgap="10" vgap="15">
+        <Label text="Usuario:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="usuarioField" GridPane.rowIndex="0" GridPane.columnIndex="1" promptText="Ingrese su usuario"/>
+        
+        <Label text="Contraseña:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="contrasenaField" GridPane.rowIndex="1" GridPane.columnIndex="1" promptText="Ingrese su contraseña"/>
+    </GridPane>
+    
+    <Button text="Iniciar Sesión" onAction="#iniciarSesion" 
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+            defaultButton="true"/>
+    
+    <Button text="Registrarse" onAction="#cargarRegistro" 
+            style="-fx-background-color: #2196F3; -fx-text-fill: white;"/>
+    
+    <Label text="© 2023 Tienda Deportiva" style="-fx-font-size: 10px; -fx-text-fill: #666;"/>
 </VBox>

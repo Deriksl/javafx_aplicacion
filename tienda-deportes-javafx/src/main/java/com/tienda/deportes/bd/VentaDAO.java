@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,20 +19,17 @@ public class VentaDAO {
         String sqlActualizarStock = "UPDATE Productos SET stock = stock - ? WHERE id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection()) {
-            conn.setAutoCommit(false); // Iniciar transacción
+            conn.setAutoCommit(false);
 
-            // Insertar la venta
-            try (PreparedStatement pstmtVenta = conn.prepareStatement(sqlVenta, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            try (PreparedStatement pstmtVenta = conn.prepareStatement(sqlVenta, Statement.RETURN_GENERATED_KEYS)) {
                 pstmtVenta.setInt(1, venta.getUsuarioId());
                 pstmtVenta.setDouble(2, venta.getTotal());
                 pstmtVenta.executeUpdate();
 
-                // Obtener el ID de la venta generada
                 ResultSet rs = pstmtVenta.getGeneratedKeys();
                 if (rs.next()) {
                     int ventaId = rs.getInt(1);
 
-                    // Insertar los detalles de la venta
                     try (PreparedStatement pstmtDetalle = conn.prepareStatement(sqlDetalle)) {
                         for (DetalleVenta detalle : detalles) {
                             pstmtDetalle.setInt(1, ventaId);
@@ -42,7 +40,6 @@ public class VentaDAO {
                         }
                     }
 
-                    // Actualizar el stock de los productos
                     try (PreparedStatement pstmtStock = conn.prepareStatement(sqlActualizarStock)) {
                         for (DetalleVenta detalle : detalles) {
                             pstmtStock.setInt(1, detalle.getCantidad());
@@ -52,8 +49,7 @@ public class VentaDAO {
                     }
                 }
             }
-
-            conn.commit(); // Confirmar transacción
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -61,7 +57,7 @@ public class VentaDAO {
 
     public List<Venta> obtenerVentasPorUsuario(int usuarioId) {
         List<Venta> ventas = new ArrayList<>();
-        String sql = "SELECT id, fecha, total FROM Ventas WHERE usuario_id = ?";
+        String sql = "SELECT id, fecha, total FROM Ventas WHERE usuario_id = ? ORDER BY fecha DESC";
 
         try (Connection conn = DatabaseConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -78,7 +74,28 @@ public class VentaDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return ventas;
+    }
 
+    public List<Venta> obtenerTodasLasVentas() {
+        List<Venta> ventas = new ArrayList<>();
+        String sql = "SELECT id, usuario_id, fecha, total FROM Ventas ORDER BY fecha DESC";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                Venta venta = new Venta();
+                venta.setId(rs.getInt("id"));
+                venta.setUsuarioId(rs.getInt("usuario_id"));
+                venta.setFecha(rs.getTimestamp("fecha").toLocalDateTime());
+                venta.setTotal(rs.getDouble("total"));
+                ventas.add(venta);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return ventas;
     }
 }

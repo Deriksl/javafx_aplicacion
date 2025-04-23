@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.tienda.deportes.ui.ReporteInventarioController" stylesheets="@/styles.css">
+    <Label text="Reporte de Inventario" styleClass="label-titulo" />
+    
+    <TableView fx:id="inventarioTable" styleClass="table-view">
+        <columns>
+            <TableColumn text="Nombre" fx:id="nombreColumn" />
+            <TableColumn text="Descripción" fx:id="descripcionColumn" />
+            <TableColumn text="Stock" fx:id="stockColumn" />
+            <TableColumn text="Precio" fx:id="precioColumn" />
+        </columns>
+    </TableView>
+
+    <Button text="Regresar al menú" onAction="#regresarAlMenu" styleClass="button" />
+</VBox>

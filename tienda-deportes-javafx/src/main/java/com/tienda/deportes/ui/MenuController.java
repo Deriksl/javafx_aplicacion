@@ -1,137 +1,153 @@
 package com.tienda.deportes.ui;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.tienda.deportes.bd.CarritoDAO;
 import com.tienda.deportes.bd.ProductoDAO;
 import com.tienda.deportes.model.Producto;
-
+import com.tienda.deportes.model.SceneLoader;
+import com.tienda.deportes.model.Sesion;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class MenuController {
-    @FXML
-    private TableView<Producto> productosTable;
-    @FXML
-    private TableColumn<Producto, String> nombreColumn;
-    @FXML
-    private TableColumn<Producto, String> descripcionColumn;
-    @FXML
-    private TableColumn<Producto, String> marcaColumn;
-    @FXML
-    private TableColumn<Producto, Double> precioColumn;
-    @FXML
-    private TableColumn<Producto, Integer> stockColumn;
-    @FXML
-    private TableColumn<Producto, Void> agregarColumn;
+    @FXML private TableView<Producto> productosTable;
+    @FXML private TableColumn<Producto, String> nombreColumn;
+    @FXML private TableColumn<Producto, Double> precioColumn;
+    @FXML private TableColumn<Producto, Void> accionesColumn;
+    @FXML private HBox menuButtonsContainer;
+    @FXML private Button carritoBtn;
+    @FXML private Button comprasBtn;
+    @FXML private Button reporteVentasBtn; // Nuevo botón
+    @FXML private Button reporteInventarioBtn; // Nuevo botón
+    @FXML private Button cerrarSesionBtn;
 
-    private ObservableList<Producto> productosObservableList;
+    private final ProductoDAO productoDAO = new ProductoDAO();
+    private final CarritoDAO carritoDAO = new CarritoDAO();
+    private ObservableList<Producto> productosList;
 
     @FXML
-    private void initialize() {
-        // Configurar las columnas de la tabla
+    public void initialize() {
+        if (!validarSesion()) return;
+        
+        System.out.println("Usuario es admin: " + Sesion.esAdmin());
+        
+        configurarTabla();
+        cargarProductos();
+        configurarMenuSegunRol();
+        configurarAccionesBotones();
+    }
+
+    private void configurarTabla() {
         nombreColumn.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        marcaColumn.setCellValueFactory(new PropertyValueFactory<>("marca"));
         precioColumn.setCellValueFactory(new PropertyValueFactory<>("precio"));
-        stockColumn.setCellValueFactory(new PropertyValueFactory<>("stock"));
-
-        // Configurar la columna de "Agregar al carrito"
-        agregarColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button agregarButton = new Button("Agregar al carrito");
-
-            {
-                agregarButton.setOnAction(event -> {
-                    Producto producto = getTableView().getItems().get(getIndex());
-                    agregarAlCarrito(producto);
-                });
-            }
-
+        
+        accionesColumn.setCellFactory(new Callback<>() {
             @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(agregarButton);
-                }
+            public TableCell<Producto, Void> call(TableColumn<Producto, Void> param) {
+                return new TableCell<>() {
+                    private final Button agregarBtn = new Button("Agregar al carrito");
+                    
+                    {
+                        agregarBtn.setOnAction(event -> {
+                            Producto producto = getTableView().getItems().get(getIndex());
+                            if (carritoDAO.agregarProductoAlCarrito(
+                                Sesion.getUsuarioId(), 
+                                producto.getId(), 
+                                1
+                            )) {
+                                mostrarAlerta("Éxito", "Producto agregado al carrito", Alert.AlertType.INFORMATION);
+                            } else {
+                                mostrarAlerta("Error", "No se pudo agregar al carrito", Alert.AlertType.ERROR);
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(agregarBtn);
+                        }
+                    }
+                };
             }
         });
-
-        // Obtener los productos de la base de datos
-        ProductoDAO productoDAO = new ProductoDAO();
-        List<Producto> productos = productoDAO.obtenerTodos();
-
-        // Convertir la lista a un ObservableList y asignarla a la tabla
-        productosObservableList = FXCollections.observableArrayList(productos);
-        productosTable.setItems(productosObservableList);
     }
 
-    private void agregarAlCarrito(Producto producto) {
-        CarritoDAO carritoDAO = new CarritoDAO();
-        carritoDAO.agregarProductoAlCarrito(1, producto.getId(), 1); // Suponiendo que el usuario tiene id=1
+    private void cargarProductos() {
+        productosList = FXCollections.observableArrayList(productoDAO.obtenerTodos());
+        productosTable.setItems(productosList);
     }
 
-    @FXML
-    private void mostrarCarrito() {
-        try {
-            // Cargar la ventana del carrito
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tienda/deportes/ui/carrito.fxml"));
-            Parent root = loader.load();
-    
-            // Obtener la ventana actual (Stage)
-            Stage stage = (Stage) productosTable.getScene().getWindow();
-    
-            // Reemplazar la escena actual con la escena del carrito
-            stage.setScene(new Scene(root));
-            stage.setTitle("Carrito de Compras");
-        } catch (IOException e) {
-            e.printStackTrace();
+    private boolean validarSesion() {
+        if (Sesion.getNombreUsuario() == null) {
+            cargarVentana("/com/tienda/deportes/ui/login.fxml", "Iniciar Sesión");
+            return false;
         }
+        return true;
     }
 
-    @FXML
-    private void cerrarSesion(ActionEvent event) {
+    private void configurarMenuSegunRol() {
+        menuButtonsContainer.getChildren().clear();
+        menuButtonsContainer.getChildren().addAll(carritoBtn, comprasBtn);
+
+        if (Sesion.esAdmin()) {
+            Button gestionUsuariosBtn = new Button("Gestión Usuarios");
+            Button gestionProductosBtn = new Button("Gestión Productos");
+            reporteVentasBtn.setVisible(true);
+            reporteInventarioBtn.setVisible(true);
+            
+            gestionUsuariosBtn.setOnAction(e -> cargarVentana("/com/tienda/deportes/ui/gestion_usuarios.fxml", "Gestión Usuarios"));
+            gestionProductosBtn.setOnAction(e -> cargarVentana("/com/tienda/deportes/ui/gestion_productos.fxml", "Gestión Productos"));
+            
+            menuButtonsContainer.getChildren().addAll(gestionUsuariosBtn, gestionProductosBtn, reporteVentasBtn, reporteInventarioBtn);
+        } else {
+            reporteVentasBtn.setVisible(false);
+            reporteInventarioBtn.setVisible(false);
+        }
+
+        menuButtonsContainer.getChildren().add(cerrarSesionBtn);
+    }
+
+    private void configurarAccionesBotones() {
+        carritoBtn.setOnAction(e -> cargarVentana("/com/tienda/deportes/ui/carrito.fxml", "Carrito"));
+        comprasBtn.setOnAction(e -> cargarVentana("/com/tienda/deportes/ui/compras.fxml", "Mis Compras"));
+        reporteVentasBtn.setOnAction(e -> cargarVentana("/com/tienda/deportes/ui/reporte_ventas.fxml", "Reporte de Ventas"));
+        reporteInventarioBtn.setOnAction(e -> cargarVentana("/com/tienda/deportes/ui/reporte_inventario.fxml", "Reporte de Inventario"));
+        cerrarSesionBtn.setOnAction(e -> cerrarSesion());
+    }
+
+    private void cargarVentana(String fxml, String titulo) {
         try {
-            // Cargar la ventana de login
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tienda/deportes/ui/login.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Stage stage = new Stage();
+            SceneLoader.loadScene(stage, fxml, titulo);
+            stage.setMaximized(true);
             stage.show();
         } catch (Exception e) {
-            e.printStackTrace();
+            mostrarAlerta("Error", "Error al cargar la ventana: " + e.getMessage(), Alert.AlertType.ERROR);
         }
-
     }
 
-    @FXML
-    private void verCompras(ActionEvent event) {
-        try {
-            // Cargar la ventana de compras
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/tienda/deportes/ui/compra.fxml"));
-            Parent root = loader.load();
-    
-            // Obtener la ventana actual
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-    
-            // Cambiar la escena de la ventana actual
-            stage.setScene(new Scene(root));
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void cerrarSesion() {
+        Sesion.cerrarSesion();
+        cargarVentana("/com/tienda/deportes/ui/login.fxml", "Iniciar Sesión");
+        ((Stage) cerrarSesionBtn.getScene().getWindow()).close();
+    }
+
+    private void mostrarAlerta(String titulo, String mensaje, Alert.AlertType tipo) {
+        Alert alert = new Alert(tipo);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
     }
 }
