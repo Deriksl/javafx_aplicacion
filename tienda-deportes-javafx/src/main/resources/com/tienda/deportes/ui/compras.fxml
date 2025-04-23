@@ -7,7 +7,15 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.tienda.deportes.ui.ComprasController" stylesheets="@/styles.css">
+<VBox alignment="CENTER" spacing="10" xmlns="http://javafx.com/javafx/17" 
+    xmlns:fx="http://javafx.com/fxml/1" 
+    fx:controller="com.tienda.deportes.ui.ComprasController" 
+    stylesheets="@/styles.css">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+    
     <Label text="Historial de Compras" styleClass="label-titulo" />
     
     <TableView fx:id="comprasTable" styleClass="table-view">

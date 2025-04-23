@@ -24,6 +24,7 @@
     
     <TableView fx:id="productosTable" styleClass="table-view">
         <columns>
+            <TableColumn text="Imagen" fx:id="imagenColumn"/>
             <TableColumn text="Producto" fx:id="nombreColumn"/>
             <TableColumn text="Precio" fx:id="precioColumn"/>
             <TableColumn text="Acciones" fx:id="accionesColumn"/>
