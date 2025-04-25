@@ -1,5 +1,6 @@
 package com.tienda.deportes.bd;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,7 +30,21 @@ public class ProductoDAO {
                 producto.setMarca(rs.getString("marca"));
                 producto.setPrecio(rs.getDouble("precio"));
                 producto.setStock(rs.getInt("stock"));
-                producto.setImagen(rs.getString("imagen"));
+                
+                // Verificar si la imagen existe antes de asignarla
+                String imagenPath = rs.getString("imagen");
+                if (imagenPath != null && !imagenPath.isEmpty()) {
+                    File file = new File(imagenPath);
+                    if (file.exists()) {
+                        producto.setImagen(imagenPath);
+                    } else {
+                        System.err.println("Advertencia: Imagen no encontrada - " + imagenPath);
+                        producto.setImagen(""); // Asignar cadena vacía si no existe
+                    }
+                } else {
+                    producto.setImagen(""); // Asignar cadena vacía si es nulo o vacío
+                }
+                
                 productos.add(producto);
             }
         } catch (SQLException e) {
